@@ -13,12 +13,11 @@ BATCH_SIZE = 128
 
 
 def random_augment(x, y, data_augmentation):
-    random_index = random.randint(0, len(list_data) - 1)
+    random_index = random.randint(0, len(data_augmentation) - 1)
     augmentation_approach = data_augmentation[random_index]
-    # data_augmentation_sequential = tf.keras.Sequential(augmentation_approach)
-
-    # return data_augmentation_sequential(x, training=True), y
-    return x, y
+    data_augmentation_sequential = tf.keras.Sequential(augmentation_approach)
+    print(augmentation_approach)
+    return data_augmentation_sequential(x, training=True), y
 
 
 def prepare(ds, shuffle=False, data_augmentation=None):

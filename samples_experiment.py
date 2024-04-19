@@ -25,7 +25,6 @@ def experiment():
                 x_val_fold, y_val_fold = x_train[val_index], y_train[val_index]
 
                 model = model_config(input_shape=INPUT_SHAPE)
-                model.compile(optimizer='adam', loss='sparse_categorical_crossentropy', metrics=['accuracy'])
 
                 approach = [list(elem) if isinstance(elem, tuple) else elem for elem in approaches]
                 approach_name = ''
