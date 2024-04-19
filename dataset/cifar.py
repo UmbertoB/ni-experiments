@@ -3,11 +3,22 @@ from tensorflow.data import Dataset
 import keras_cv as keras_cv
 import tensorflow_datasets as tfds
 from keras.datasets import cifar10
+import numpy as np
+import random
 from sklearn.model_selection import KFold
 from experiments_config import INPUT_SHAPE
 
 AUTOTUNE = tf.data.AUTOTUNE
 BATCH_SIZE = 128
+
+
+def random_augment(x, y, data_augmentation):
+    random_index = random.randint(0, len(list_data) - 1)
+    augmentation_approach = data_augmentation[random_index]
+    # data_augmentation_sequential = tf.keras.Sequential(augmentation_approach)
+
+    # return data_augmentation_sequential(x, training=True), y
+    return x, y
 
 
 def prepare(ds, shuffle=False, data_augmentation=None):
@@ -25,8 +36,7 @@ def prepare(ds, shuffle=False, data_augmentation=None):
     ds = ds.batch(BATCH_SIZE)
 
     if data_augmentation:
-        data_augmentation_sequential = tf.keras.Sequential(data_augmentation)
-        ds = ds.map(lambda x, y: (data_augmentation_sequential(x, training=True), y),
+        ds = ds.map(lambda x, y: random_augment(x, y, data_augmentation),
                     num_parallel_calls=AUTOTUNE)
 
     return ds.prefetch(buffer_size=AUTOTUNE)
@@ -41,8 +51,8 @@ def get_cifar10_kfold_splits(n_splits):
     return x_train, y_train, x_test, y_test, dataset_splits
 
 
-def get_cifar10_dataset(x, y, aug_layers=None):
-    dataset = prepare(Dataset.from_tensor_slices((x, y)), data_augmentation=aug_layers)
+def get_cifar10_dataset(x, y, augment_approach=None):
+    dataset = prepare(Dataset.from_tensor_slices((x, y)), data_augmentation=augment_approach)
     return dataset
 
 
