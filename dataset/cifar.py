@@ -12,15 +12,17 @@ AUTOTUNE = tf.data.AUTOTUNE
 BATCH_SIZE = 128
 
 
-def random_augment(x, y, data_augmentation):
-    random_index = random.randint(0, len(data_augmentation) - 1)
-    augmentation_approach = data_augmentation[random_index]
-    data_augmentation_sequential = tf.keras.Sequential(augmentation_approach)
+def random_augment(x, y, augmentation_approach):
     print(augmentation_approach)
-    return data_augmentation_sequential(x, training=True), y
+    return x, y
+    # random_index = random.randint(0, len(data_augmentation) - 1)
+    # augmentation_approach = data_augmentation[random_index]
+    # data_augmentation_sequential = tf.keras.Sequential(augmentation_approach)
+    # print(augmentation_approach)
+    # return data_augmentation_sequential(x, training=True), y
 
 
-def prepare(ds, shuffle=False, data_augmentation=None):
+def prepare(ds, shuffle=False, augmentation_approach=None):
 
     resize_and_rescale = tf.keras.Sequential([
         keras_cv.layers.Resizing(INPUT_SHAPE[0], INPUT_SHAPE[1]),
@@ -34,8 +36,8 @@ def prepare(ds, shuffle=False, data_augmentation=None):
 
     ds = ds.batch(BATCH_SIZE)
 
-    if data_augmentation:
-        ds = ds.map(lambda x, y: random_augment(x, y, data_augmentation),
+    if augmentation_approach:
+        ds = ds.map(lambda x, y: random_augment(x, y, augmentation_approach),
                     num_parallel_calls=AUTOTUNE)
 
     return ds.prefetch(buffer_size=AUTOTUNE)
@@ -50,8 +52,8 @@ def get_cifar10_kfold_splits(n_splits):
     return x_train, y_train, x_test, y_test, dataset_splits
 
 
-def get_cifar10_dataset(x, y, augment_approach=None):
-    dataset = prepare(Dataset.from_tensor_slices((x, y)), data_augmentation=augment_approach)
+def get_cifar10_dataset(x, y, augmentation_approach=None):
+    dataset = prepare(Dataset.from_tensor_slices((x, y)), augmentation_approach=augmentation_approach)
     return dataset
 
 
