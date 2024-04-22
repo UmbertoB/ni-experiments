@@ -11,6 +11,7 @@ import numpy as np
 
 def experiment():
     x_train, y_train, x_test, y_test, splits = get_cifar10_kfold_splits(KFOLD_N_SPLITS)
+    print(len(CONFIGS['approaches']))
 
     for model_class in CONFIGS['models']:
 

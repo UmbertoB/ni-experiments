@@ -12,11 +12,11 @@ AUTOTUNE = tf.data.AUTOTUNE
 BATCH_SIZE = 128
 
 
-def random_augment(x, y, augmentation_approach):
-    print(augmentation_approach)
+def random_augment(x, y, augmentation_approaches):
+    random_index = random.randint(0, len(augmentation_approaches) - 1)
+    final_approach = augmentation_approaches[random_index]
+    print(final_approach)
     return x, y
-    # random_index = random.randint(0, len(data_augmentation) - 1)
-    # augmentation_approach = data_augmentation[random_index]
     # data_augmentation_sequential = tf.keras.Sequential(augmentation_approach)
     # print(augmentation_approach)
     # return data_augmentation_sequential(x, training=True), y
@@ -52,8 +52,8 @@ def get_cifar10_kfold_splits(n_splits):
     return x_train, y_train, x_test, y_test, dataset_splits
 
 
-def get_cifar10_dataset(x, y, augmentation_approach=None):
-    dataset = prepare(Dataset.from_tensor_slices((x, y)), augmentation_approach=augmentation_approach)
+def get_cifar10_dataset(x, y, augmentation_approaches=None):
+    dataset = prepare(Dataset.from_tensor_slices((x, y)), augmentation_approach=augmentation_approaches)
     return dataset
 
 

@@ -19,10 +19,10 @@ CONFIGS = {
     ],
     "approaches": [subset for subset in all_subsets(
         [
-            [],
-            [RandomSaltAndPepper()],
-            [DefaultAugLayers],
-            [DefaultAugLayers, RandomSaltAndPepper()],
+            None,
+            RandomSaltAndPepper(name='Salt&Pepper'),
+            DefaultAugLayers,
+            [DefaultAugLayers, RandomSaltAndPepper(name='Salt&Pepper')],
         ]
     )]
 }
